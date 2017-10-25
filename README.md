@@ -1,2 +1,2 @@
-# ssr_userconfig_linux
-just for linux ssr python
+纯粹是学习python的练手产品，勿喷。
+仅适用于LINUX上使用SSR PYTHON版客户端生成USER-CONFIG.JSON配置文件
