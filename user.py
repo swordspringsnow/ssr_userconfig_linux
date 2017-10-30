@@ -17,14 +17,14 @@ print '''
 请输入SSR地址码（就是ssr://dhfjsjsjxjdjs那一串玩意儿，嫌太长？你丫不会复制粘帖吗）
 手动配置服务器信息请输入1'''
 
-ssrerror = raw_input()
+ssrhead = raw_input()
 error = True
 while error:
-    if ssrerror == "1":
+    if ssrhead == "1":
         break
     try:
-        ssrerrorde = re.split('[:/]',ssrerror)
-        ssrurl = ssrerrorde[3]
+        ssrhead = re.split('[:/]',ssrhead)
+        ssrurl = ssrhead[3]
         missing_padding = 4 - len(ssrurl) % 4
         if missing_padding:
             ssrurl += b'='* missing_padding
@@ -43,9 +43,8 @@ while error:
         error = False
     except:
         print "导入失败，请确认输入的SSR地址是否正确"
-        ssrerror = raw_input("请输入SSR地址码，或输入1手动配置\n")
+        ssrhead = raw_input("请输入SSR地址码，或输入1手动配置\n")
         error = True
-ssrhead = ssrerror
 
 if ssrhead == "1":
     serverip = raw_input("请输入服务器IP地址:\n")
