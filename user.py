@@ -3,47 +3,41 @@
 import base64
 import re
 
-print '''
-本程序只适用于在linux系统上使用python版ssr客户端
-ssr的服务器版本身包含有客户端，只需要从github上下载服务器端放入本机即可使用
-下载软件后将本程序放入shadowsocksr/shadowsocks目录后运行即可
-也可以运行本程序后将生成的user-config.json文件复制到此目录下
-因每次更换服务器都需要手动更改user-config.json很蛋疼故此写了这个程序
-高手请忽略，按回车键开始
-'''
-hello = raw_input()
+class miss:
+    def ssr4(self,ssrurl):
+        missing_padding = 4 - len(ssrurl) % 4
+        if missing_padding:
+            ssrurl += b'='* missing_padding
+            return ssrurl
 
 print '''
-请输入SSR地址码（就是ssr://dhfjsjsjxjdjs那一串玩意儿，嫌太长？你丫不会复制粘帖吗）
+请输入SSR地址码
+（就是ssr://XX,复制粘贴不嫌长您了就手打）
 手动配置服务器信息请输入1'''
 
-ssrhead = raw_input()
 error = True
 while error:
+    ssrhead = raw_input()
     if ssrhead == "1":
         break
     try:
         ssrhead = re.split('[:/]',ssrhead)
-        ssrurl = ssrhead[3]
-        missing_padding = 4 - len(ssrurl) % 4
-        if missing_padding:
-            ssrurl += b'='* missing_padding
+        ssrurl = miss()
+        ssrurl = ssrurl.ssr4(ssrhead[3])		
         ssrurl = base64.urlsafe_b64decode(ssrurl)
         ssrurl = re.split('[:/?&]',ssrurl)
         serverip = ssrurl[0]
         serverport = ssrurl[1]
         password = ssrurl[5]
-        missing_padding = 4 - len(password) % 4
-        if missing_padding:
-            password += b'='* missing_padding
+        password = miss()
+        password = password.ssr4(ssrurl[5])
         password = base64.urlsafe_b64decode(password)
         method = ssrurl[3]
         protocol = ssrurl[2]
         obfs = ssrurl[4]
         error = False
     except:
-        print "导入失败，请确认输入的SSR地址是否正确"
-        ssrhead = raw_input("请输入SSR地址码，或输入1手动配置\n")
+        print "导入失败，请输入正确的SSR地址或输入1手动配置"
         error = True
 
 if ssrhead == "1":
@@ -60,7 +54,7 @@ if ssrhead == "1":
     password = raw_input("请输入密码:\n")
 
     print '''
-none 不加密直接回车
+0="NONE不加密"
 1="table"
 2="rc4"
 3="rc4-md5"
@@ -83,82 +77,23 @@ none 不加密直接回车
 20="salsa20"
 21="chacha20"
 22="chacha20-ietf"
-    
+
 请输入对应的加密方式数字'''
+    method = ["","table","rc4","rc4-md5","rc4-md5-6","aes-128-cfb"\
+,"aes-192-cfb","aes-256-cfb","aes-128-ctr","aes-192-ctr","aes-256-ctr"\
+,"bf-cfb","camellia-128-cfb","camellia-192-cfb","camellia-256-cfb"\
+,"cast5-cfb","des-cfb","idea-cfb","rc2-cfb","seed-cfb","salsa20"\
+,"chacha20","chacha20-ietf"]
     error = True
     while error:
-        method = raw_input()
-        if method == "":
-            method == ""
+        try:
+            num = input()
+            if num < 0:
+                num = "错误"
+            method = method[num]
             error = False
-        elif method == "1":
-            method = "table"
-            error = False
-        elif method == "2":
-            method = "rc4"
-            error = False
-        elif method == "3":
-            method = "rc4-md5"
-            error = False
-        elif method == "4":
-            method = "rc4-md5-6"
-            error = False
-        elif method == "5":
-            method = "aes-128-cfb"
-            error = False
-        elif method == "6":
-            method = "aes-192-cfb"
-            error = False
-        elif method == "7":
-            method = "aes-256-cfb"
-            error = False
-        elif method == "8":
-            method = "aes-128-ctr"
-            error = False
-        elif method == "9":
-            method = "aes-192-ctr"
-            error = False
-        elif method == "10":
-            method = "aes-256-ctr"
-            error = False
-        elif method == "11":
-            method = "bf-cfb"
-            error = False
-        elif method == "12":
-            method = "camellia-128-cfb"
-            error = False
-        elif method == "13":
-            method = "camellia-192-cfb"
-            error = False
-        elif method == "14":
-            method = "camellia-256-cfb"
-            error = False
-        elif method == "15":
-            method = "cast5-cfb"
-            error = False
-        elif method == "16":
-            method = "des-cfb"
-            error = False
-        elif method == "17":
-            method = "idea-cfb"
-            error = False
-        elif method == "18":
-            method = "rc2-cfb"
-            error = False
-        elif method == "19":
-            method = "seed-cfb"
-            error = False
-        elif method == "20":
-            method = "salsa20"
-            error = False
-        elif method == "21":
-            method = "chacha20"
-            error = False
-        elif method == "22":
-            method = "chacha20-ietf"
-            error = False
-        else:
-            print "请输入正确的数字"
+        except:
+            print "输入错误，请输入正确的数字"
             error = True
 
     print '''
@@ -176,46 +111,17 @@ none 不加密直接回车
 12="auth_chain_d"
     
 请输入对应的协议插件数字'''
+    protocol = ["origin","verify_simple","verify_sha1","auth_sha1","auth_sha1_v2","auth_sha1_v4"\
+,"auth_aes128_sha1","auth_aes128_md5","auth_chain_a","auth_chain_b","auth_chain_c","auth_chain_d"]
     error = True
     while error:
-        protocol = raw_input()
-        if protocol == "1":
-            protocol = "origin"
+        try:
+            num = input()
+            if num < 1:
+                num = "错误"
+            protocol = protocol[num-1]
             error = False
-        elif protocol == "2":
-            protocol = "verify_simple"
-            error = False
-        elif protocol == "3":
-            protocol = "verify_sha1"
-            error = False
-        elif protocol == "4":
-            protocol = "auth_sha1"
-            error = False
-        elif protocol == "5":
-            protocol = "auth_sha1_v2"
-            error = False
-        elif protocol == "6":
-            protocol = "auth_sha1_v4"
-            error = False
-        elif protocol == "7":
-            protocol = "auth_aes128_sha1"
-            error = False
-        elif protocol == "8":
-            protocol = "auth_aes128_md5"
-            error = False
-        elif protocol == "9":
-            protocol = "auth_chain_a"
-            error = False
-        elif protocol == "10":
-            protocol = "auth_chain_b"
-            error = False
-        elif protocol == "11":
-            protocol = "auth_chain_c"
-            error = False
-        elif protocol == "12":
-            protocol = "auth_chain_d"
-            error = False
-        else:
+        except:
             print "请输入正确的数字"
             error = True
 
@@ -230,28 +136,17 @@ none 不加密直接回车
 6="tls1.2_ticket_fastauth"
     
 请输入对应的混淆参数的数字'''
+    obfs = ["plain","http_simple","http_post","tls_simple"\
+,"tls1.2_ticket_auth","tls1.2_ticket_fastauth"]
     error = True
     while error:
-        obfs = raw_input()
-        if obfs == "1":
-            obfs = "plain"
+        try:
+            num = input()
+            if num < 1:
+                num = "错误"
+            obfs = obfs[num-1]
             error = False
-        elif obfs == "2":
-            obfs = "http_simple"
-            error = False
-        elif obfs == "3":
-            obfs = "http_post"
-            error = False
-        elif obfs == "4":
-            obfs = "tls_simple"
-            error = False
-        elif obfs == "5":
-            obfs = "tls1.2_ticket_auth"
-            error = False
-        elif obfs == "6":
-            obfs = "tls1.2_ticket_fastauth"
-            error = False
-        else:
+        except:
             print "请输入正确的数字"
             error = True
 
@@ -301,7 +196,9 @@ user='''{
     "redirect": "",
     "fast_open": false
 }
-'''%(serverip,serverport,localaddress,localport,password,method,protocol,protocolparam,obfs,obfsparam)
+'''%(serverip,serverport,localaddress,localport,\
+password,method,protocol,protocolparam,obfs,obfsparam)
 with open('user-config.json','w') as f:
 	f.write(user.encode("utf-8"))
-print user+"\n"+"请检查输入是否有误，若需要修改请重新执行程序。\n启动ssr请在终端切换至shadowsocksr/shadowsocks目录执行python local.py -d start"
+print user+"\n"+"请检查输入是否有误，若需要修改请重新执行程序。\
+\n启动ssr请在终端切换至shadowsocksr/shadowsocks目录执行python local.py -d start"
