@@ -72,17 +72,15 @@ if ssrhead == "1":
         print "请输入本机代理地址，默认127.0.0.1，使用默认请回车"
         localaddress = raw_input()
         if localaddress == "":
-            break
+            localaddress = "127.0.0.1"
         error = checkip(localaddress)
-    localaddress = "127.0.0.1"
     error = True
     while error:
         print "请输入本机代理端口，默认1080，使用默认请回车"
         localport = raw_input()
         if localport == "":
-            break
+            localport = "1080"
         error = checkport(localport)
-    localport = "1080"
     password = raw_input("请输入密码:\n")
 
     print '''
@@ -194,17 +192,15 @@ else:
         print "请输入本机代理地址，默认127.0.0.1，使用默认请回车"
         localaddress = raw_input()
         if localaddress == "":
-            break
+            localaddress = "127.0.0.1"
         error = checkip(localaddress)
-    localaddress = "127.0.0.1"
     error = True
     while error:
         print "请输入本机代理端口，默认1080，使用默认请回车"
         localport = raw_input()
         if localport == "":
-            break
+            localport = "1080"
         error = checkport(localport)
-    localport = "1080"
     protocolparam = raw_input("请输入协议参数，不使用参数请回车:\n")
     print '''
 请输入混淆参数
