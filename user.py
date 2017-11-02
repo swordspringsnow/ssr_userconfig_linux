@@ -10,6 +10,24 @@ class miss:
             ssrurl += b'='* missing_padding
             return ssrurl
 
+def checkip(ip):
+    p = re.compile('^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$')
+    if p.match(ip):
+        return False
+    else:
+        print "输入错误请重新输入"
+        return True
+
+def checkport(port):
+    try:
+        if int(port)<0 or int(port)>65535:
+            print "输入错误请重新输入"
+            return True
+        return False
+    except:
+        print "输入错误请重新输入"
+        return True
+
 print '''
 请输入SSR地址码
 （就是ssr://XX,复制粘贴不嫌长您了就手打）
@@ -41,16 +59,30 @@ while error:
         error = True
 
 if ssrhead == "1":
-    serverip = raw_input("请输入服务器IP地址:\n")
-    serverport = raw_input("请输入服务器端口:\n")
-    print "请输入本机代理地址，默认127.0.0.1，使用默认请回车"
-    localaddress = raw_input()
-    if localaddress == "":
-        localaddress = "127.0.0.1"
-    print "请输入本机代理端口，默认1080，使用默认请回车"
-    localport = raw_input()
-    if localport == "":
-        localport = "1080"
+    error = True
+    while error:
+        serverip = raw_input("请输入服务器IP地址:\n")
+        error = checkip(serverip)
+    error = True
+    while error:
+        serverport = raw_input("请输入服务器端口:\n")
+        error = checkport(serverport)
+    error = True
+    while error:
+        print "请输入本机代理地址，默认127.0.0.1，使用默认请回车"
+        localaddress = raw_input()
+        if localaddress == "":
+            break
+        error = checkip(localaddress)
+    localaddress = "127.0.0.1"
+    error = True
+    while error:
+        print "请输入本机代理端口，默认1080，使用默认请回车"
+        localport = raw_input()
+        if localport == "":
+            break
+        error = checkport(localport)
+    localport = "1080"
     password = raw_input("请输入密码:\n")
 
     print '''
@@ -157,14 +189,22 @@ if ssrhead == "1":
     obfsparam = raw_input()
 
 else:
-    print "请输入本机代理地址，默认127.0.0.1，使用默认请回车"
-    localaddress = raw_input()
-    if localaddress == "":
-        localaddress = "127.0.0.1"
-    print "请输入本机代理端口，默认1080，使用默认请回车"
-    localport = raw_input()
-    if localport == "":
-        localport = "1080"
+    error = True
+    while error:
+        print "请输入本机代理地址，默认127.0.0.1，使用默认请回车"
+        localaddress = raw_input()
+        if localaddress == "":
+            break
+        error = checkip(localaddress)
+    localaddress = "127.0.0.1"
+    error = True
+    while error:
+        print "请输入本机代理端口，默认1080，使用默认请回车"
+        localport = raw_input()
+        if localport == "":
+            break
+        error = checkport(localport)
+    localport = "1080"
     protocolparam = raw_input("请输入协议参数，不使用参数请回车:\n")
     print '''
 请输入混淆参数
