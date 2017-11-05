@@ -2,6 +2,7 @@
 
 import base64
 import re
+import os
 
 class miss:
     def ssr4(self,ssrurl):
@@ -236,5 +237,26 @@ user='''{
 password,method,protocol,protocolparam,obfs,obfsparam)
 with open('user-config.json','w') as f:
 	f.write(user.encode("utf-8"))
-print user+"\n"+"请检查输入是否有误，若需要修改请重新执行程序。\
-\n启动ssr请在终端切换至shadowsocksr/shadowsocks目录执行python local.py -d start"
+print user+"\n"+"请检查输入是否有误，若需要修改请重新执行程序。"
+error = True
+while error:
+    start = raw_input('请输入1启动SSR，不启动退出请回车\n')
+    if start == "":
+        break
+    if start == "1":
+        filelist = os.path.exists('local.py')
+        if filelist:
+            syslist = os.popen('lsb_release -a')
+            sys = syslist.read()
+            sys = re.split('[\t\n]',sys)
+            if sys[1] == 'Ubuntu':
+                os.system('sudo python local.py -d start')
+            else:
+                os.system('python local.py -d start')
+            error = False
+        else:
+            print "未找到启动文件，请确认程序位于shadowsocksr/shadowsocks目录下\n"
+            error = True
+    else:
+        print "输入错误请重新输入\n"
+        error = True
