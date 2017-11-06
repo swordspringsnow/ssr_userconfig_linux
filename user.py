@@ -250,9 +250,21 @@ while error:
             sys = syslist.read()
             sys = re.split('[\t\n]',sys)
             if sys[1] == 'Ubuntu':
-                os.system('sudo python local.py -d start')
+                ssrlist = os.popen('sudo python local.py -d start')
+                ssr = ssrlist.read()
+                ssr = ssr.split()
+                if ssr[0] == 'IPv6' and ssr[1] == 'support':
+                    print '启动成功'
+                else:
+                    print '启动失败，请确认设置是否正确'
             else:
-                os.system('python local.py -d start')
+                ssrlist = os.popen('python local.py -d start')
+                ssr = ssrlist.read()
+                ssr = ssr.split()
+                if ssr[0] == 'IPv6' and ssr[1] == 'support':
+                    print '启动成功'
+                else:
+                    print '启动失败，请确认设置是否正确'
             error = False
         else:
             print "未找到启动文件，请确认程序位于shadowsocksr/shadowsocks目录下\n"
